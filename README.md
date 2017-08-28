@@ -4,9 +4,9 @@
 # Introduction
 
 @cromignon has made an image for us in his [own repository](https://github.com/cromigon/ubooquity-docker), but doesn't seems to maintain it anymore.  
-This image is built to be as lighweight and simple as possible. It is based on alpine and java 8.  
+This image is built to be as lighweight and simple as possible. It is based on alpine and java 8.
 
-- **Ubooquity version** : 2.1.0
+I exported Ubooquity's installation to the container's build level. This will increase time of the build, but permit the user to control it's Ubooquity's version.
 
 ## About Ubooquity
 
@@ -37,6 +37,16 @@ Ensure that you have folders created for the ubooquity config on the host.
 It's generally recommended to have some e-books or comics to mount in :)
 
 ## Docker
+
+### Environnement variables (with their default values if not specified) :  
+* UBOOQUITY_VERSION=latest 
+If you don't want latest version, specify the version number with this variable. See [all available version here](http://vaemendis.net/ubooquity/downloads/).  
+* FILE_ENCODING=UTF-8 
+Default to UTF-8.  
+* LIBRARY_PORT=2202 
+Default port for accessing the library.  
+* ADMIN_PORT=2502 
+Default port for the admin interface.
 
 Run the following command line :
 
