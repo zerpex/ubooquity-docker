@@ -39,13 +39,13 @@ It's generally recommended to have some e-books or comics to mount in :)
 ## Docker
 
 ### Environnement variables (with their default values if not specified) :  
-* UBOOQUITY_VERSION=latest 
+* UBOOQUITY_VERSION=latest  
 If you don't want latest version, specify the version number with this variable. See [all available version here](http://vaemendis.net/ubooquity/downloads/).  
-* FILE_ENCODING=UTF-8 
+* FILE_ENCODING=UTF-8  
 Default to UTF-8.  
-* LIBRARY_PORT=2202 
+* LIBRARY_PORT=2202  
 Default port for accessing the library.  
-* ADMIN_PORT=2502 
+* ADMIN_PORT=2502  
 Default port for the admin interface.
 
 Run the following command line :
