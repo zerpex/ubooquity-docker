@@ -1,10 +1,6 @@
 # Pull base image.
 FROM java:8u111-jre-alpine
 
-# Define Ubooquity version
-ENV \
-  APP_VERSION=$(curl -s http://vaemendis.net/ubooquity/static2/download | grep Version | awk -F\& '{print $1}' | awk '{print $NF}')
-
 # Install Ubooquity
 RUN \
   apk --no-cache add \
@@ -13,10 +9,7 @@ RUN \
   mkdir -p \
      /config \
      /media \
-     /ubooquity && \
-  wget http://vaemendis.net/ubooquity/downloads/Ubooquity-${APP_VERSION}.zip -O /tmp/${APP_VERSION}.zip && \
-  unzip /tmp/${APP_VERSION}.zip -d /ubooquity && \
-  rm /tmp/${APP_VERSION}.zip
+     /ubooquity 
 
 # Define working directory.
 WORKDIR /ubooquity
@@ -29,8 +22,11 @@ VOLUME \
   /config \
   /media
 
-# Define default command
-ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-jar", "-Xmx512m", "/ubooquity/Ubooquity.jar", "-workdir", "/config", "-headless", "-libraryport", "2202", "-adminport", "2502", "-remoteadmin"]
+ADD first_run.sh /first_run.sh
+ADD run.sh /run.sh
+RUN chmod +x /*.sh
+
+CMD ["/run.sh"]
 
 # Maintainer
 LABEL maintainer="zer <zerpex@gmail.com>"
