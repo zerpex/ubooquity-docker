@@ -1,5 +1,6 @@
 # Pull base image.
-FROM java:8u111-jre-alpine
+#FROM java:8u111-jre-alpine
+FROM openjdk:8-jre-alpine
 
 # Define Ubooquity version
 ENV \
