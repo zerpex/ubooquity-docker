@@ -4,7 +4,7 @@
 # Introduction
 
 @cromignon has made an image for us in his [own repository](https://github.com/cromigon/ubooquity-docker), but doesn't seems to maintain it anymore.  
-This image is built to be as lighweight and simple as possible. It is based on alpine and java 8.  
+This image is built to be as lighweight and simple as possible. It is based on alpine and openjdk 8.  
 
 - **Ubooquity version** : 2.1.1
 
@@ -55,7 +55,7 @@ docker run --restart=always -d \
 Use the following docker-compose.yml and adapt it to your configuration :
 
 ```
-version: '2'
+version: '2.4'
 
 services:
   ubooquity:
@@ -70,46 +70,8 @@ services:
     ports:
       - 2202:2202
       - 2502:2502
-
-volumes:
-  files:
-    driver: local
 ```
 
-docker-compose with Watchtower :
-
-```
-version: '2'
-
-services:
-   ubooquity:
-    restart: always
-    image: zerpex/ubooquity-docker
-    container_name: ubooquity
-    volumes:
-      - ./files/conf:/config
-      - /library:/media
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - TZ=Europe/Paris
-    ports:
-      - 2202:2202
-      - 2502:2502
-
-   watchtower:
-    restart: always
-    image: v2tec/watchtower
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - TZ=Europe/Paris
-
-volumes:
-  files:
-    driver: local
-```
 
 ## Notes
 
