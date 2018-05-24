@@ -52,6 +52,8 @@ docker run --restart=always -d \
 
 ## Docker-compose
 
+### Simple compose:
+
 Use the following docker-compose.yml and adapt it to your configuration :
 
 ```
@@ -65,13 +67,106 @@ services:
       - /PATH/TO/UBOOQUITY/CONFIG:/config
       - /PATH/TO/YOUR/COMICS:/media
       - /etc/localtime:/etc/localtime:ro
-    environment:
-      - TZ=Europe/Paris
     ports:
       - 2202:2202
       - 2502:2502
 ```
 
+### Full compose with reverse proxy:
+
+First, create a .env file with the following content and set the variables according to your needs:  
+
+```
+# Mail address used by let's encrypt:
+LE_MAIL=you@mail.tld
+
+# Path where you store appplication files:
+PATH_APP=/opt
+
+# Path of your media files:
+PATH_MEDIA=/data/library
+
+# Ubooquity urls:
+UBOOQUITY_URL=ubooquity.domain.tld
+UBOOQUITY_ADMIN_URL=ubooquityadmin.domain.tld
+
+# Name docker's proxy network:
+PROXY=traefik
+
+```
+
+Second, create a docker-compose.yml file with the following content:  
+
+```
+version: '2.4'
+
+services:
+#################
+# Reverse Proxy #
+#################
+  traefik:
+    restart: unless-stopped
+    image: traefik:alpine
+    container_name: proxy_traefik
+    hostname: traefik
+    command: 
+      --defaultEntryPoints='http,https'
+      --web
+      --web.address=:8080
+      --entryPoints='Name:http Address::80  Redirect.EntryPoint:https' 
+      --entryPoints='Name:https Address::443 TLS' 
+      --acme
+      --acme.email=${LE_MAIL}
+      --acme.storage=/certs/acme.json 
+      --acme.entryPoint=https 
+      --acme.ondemand=false
+      --acme.onhostrule=true
+      --acme.httpChallenge.entryPoint=http
+      --docker
+      --docker.domain=traefik
+      --docker.watch
+      --docker.exposedbydefault=false
+    ports:
+      - "80:80"
+      - "443:443"
+#      - "8080:8080" # Statut page
+    volumes:
+      - ${PATH_APP}/letsencrypt/certs:/certs:rw
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro  
+    networks:
+      - proxy
+
+#############
+# Ubooquity #
+#############
+  ubooquity:
+    restart: always
+    image: zerpex/ubooquity-docker
+    container_name: stream-book_Ubooquity
+    hostname: library
+    labels:
+      - traefik.enable=true
+      - traefik.app.frontend.rule=Host:${UBOOQUITY_URL}
+      - traefik.app.port=2202
+      - traefik.admin.frontend.rule=Host:${UBOOQUITY_ADMIN_URL}
+      - traefik.admin.port=2502
+      - traefik.docker.network=${PROXY}
+    volumes:
+      - ${PATH_APP}/ubooquity/conf:/config:rw
+      - ${PATH_MEDIA}/comics:/media:rw
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external:
+      name: ${PROXY}
+```
+
+Third, execute the following command:  
+`docker-compose up -d `  
 
 ## Notes
 
