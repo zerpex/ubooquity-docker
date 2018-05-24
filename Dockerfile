@@ -10,6 +10,7 @@ ENV \
 RUN \
   apk --no-cache add \
      unzip \
+     curl \
      wget && \
   mkdir -p \
      /config \
@@ -29,6 +30,14 @@ EXPOSE 2202 2502
 VOLUME \
   /config \
   /media
+
+# Test if service is ok
+HEALTHCHECK \
+  --interval=30s \
+  --timeout=3s \
+  --retries=3 \
+  --start-period=1m \
+  CMD curl -f http://127.0.0.1:2202/ || exit 1
 
 # Define default command
 ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-jar", "-Xmx512m", "/ubooquity/Ubooquity.jar", "-workdir", "/config", "-headless", "-libraryport", "2202", "-adminport", "2502", "-remoteadmin"]
