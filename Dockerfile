@@ -1,7 +1,3 @@
-sudo java -Duser.home=$HOME
-
-
-
 # Pull base image.
 FROM openjdk:8-jre-alpine
 
