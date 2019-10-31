@@ -4,9 +4,9 @@
 # Introduction
 
 @cromignon has made an image for us in his [own repository](https://github.com/cromigon/ubooquity-docker), but doesn't seems to maintain it anymore.  
-This image is built to be as lighweight and simple as possible. It is based on alpine and java 8.
+This image is built to be as lighweight and simple as possible. It is based on alpine and openjdk 8.  
 
-I exported Ubooquity's installation to the container's build level. This will increase time of the build, but permit the user to control it's Ubooquity's version.
+- **Ubooquity version** : 2.1.2
 
 ## About Ubooquity
 
