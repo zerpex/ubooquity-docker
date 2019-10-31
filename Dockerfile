@@ -9,12 +9,10 @@ ENV \
   USER=ubooquity \
   GROUP=ubooquity
 
-# Create a non-root user ubooquity
-RUN addgroup -g ${GID} ${GROUP} && \
-    adduser -D -u ${UID} -G ${GROUP} ${USER}
-
-# Install Ubooquity
+# Create a non-root user ubooquity & Install Ubooquity
 RUN \
+  addgroup -g ${GID} ${GROUP} && \
+  adduser -D -u ${UID} -G ${GROUP} ${USER} && \
   apk --no-cache add \
      unzip \
      curl \
@@ -34,9 +32,6 @@ RUN \
 # Define working directory.
 WORKDIR /ubooquity
 
-# Change user to ubooquity
-USER ${USER}
-
 # Expose Ubooquity ports
 EXPOSE 2202 2502
 
@@ -52,6 +47,9 @@ HEALTHCHECK \
   --retries=3 \
   --start-period=1m \
   CMD curl -f http://127.0.0.1:2202/ || exit 1
+
+# Change user to ubooquity
+USER ${USER}
 
 # Define default command
 ENTRYPOINT ["java", "-Duser.home=$HOME", "-Dfile.encoding=UTF-8", "-jar", "-Xmx1024m", "/ubooquity/Ubooquity.jar", "-workdir", "/config", "-headless", "-libraryport", "2202", "-adminport", "2502", "-remoteadmin"]
