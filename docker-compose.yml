@@ -1,4 +1,4 @@
-version: '2'
+version: '2.4'
 
 services:
    ubooquity:
@@ -6,8 +6,8 @@ services:
     image: zerpex/ubooquity-docker
     container_name: ubooquity
     volumes:
-      - ./files/conf:/config
-      - /library:/media
+      - ./config:/config:rw
+      - /library:/media:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=Europe/Paris
@@ -24,7 +24,3 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=Europe/Paris
-
-volumes:
-  files:
-    driver: local
