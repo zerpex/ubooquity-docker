@@ -1,6 +1,14 @@
 ![Ubooquity Logo](http://i.imgur.com/InPPMtr.png)  
 [![Docker Build Statu](https://img.shields.io/docker/build/zerpex/ubooquity-docker.svg)](https://hub.docker.com/r/zerpex/ubooquity-docker/) [![Docker Stars](https://img.shields.io/docker/stars/zerpex/ubooquity-docker.svg?label=docker%20%E2%98%85)](https://hub.docker.com/r/zerpex/ubooquity-docker/) [![Docker Pulls](https://img.shields.io/docker/pulls/zerpex/ubooquity-docker.svg)](https://hub.docker.com/r/zerpex/ubooquity-docker/) [![Github Stars](https://img.shields.io/github/stars/zerpex/ubooquity-docker.svg?label=github%20%E2%98%85)](https://github.com/zerpex/ubooquity-docker/stargazers) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zerpex/ubooquity-docker/master/LICENSE)
 
+# WARNING:
+Since the last build, I have changed the default user to a non-root one.
+You have to change the ownership of your local ubooquity's config folder to 1042:
+
+    chown -R 1042:1042 /PATH/TO/UBOOQUITY/CONFIG
+
+And then restart your container.
+
 # Introduction
 
 @cromignon has made an image for us in his [own repository](https://github.com/cromigon/ubooquity-docker), but doesn't seems to maintain it anymore.  
