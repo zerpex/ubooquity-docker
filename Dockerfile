@@ -54,7 +54,7 @@ HEALTHCHECK \
   CMD curl -f http://127.0.0.1:2202/ || exit 1
 
 # Define default command
-ENTRYPOINT ["sudo", "-u", "$UID", "java", "-Duser.home=$HOME", "-Dfile.encoding=UTF-8", "-jar", "-Xmx1024m", "/ubooquity/Ubooquity.jar", "-workdir", "/config", "-headless", "-libraryport", "2202", "-adminport", "2502", "-remoteadmin"]
+ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-jar", "-Xmx1024m", "/ubooquity/Ubooquity.jar", "-workdir", "/config", "-headless", "-libraryport", "2202", "-adminport", "2502", "-remoteadmin"]
 
 # Maintainer
 LABEL maintainer="zer <zerpex@gmail.com>"
