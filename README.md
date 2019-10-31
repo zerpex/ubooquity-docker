@@ -38,22 +38,22 @@ It's generally recommended to have some e-books or comics to mount in :)
 
 ## Docker
 
-### Environnement variables (with their default values if not specified) :  
-* UBOOQUITY_VERSION=  
-Empty for latest version. If you don't want latest version, specify the version number with this variable. See [all available versions here](http://vaemendis.net/ubooquity/downloads/).  
-* FILE_ENCODING=UTF-8  
-Default file encoding set to UTF-8.  
-* LIBRARY_PORT=2202  
-Default port for accessing the library.  
-* ADMIN_PORT=2502  
-Default port for the admin interface.
+### Manage configuration directory :  
+In the following exemples, replace the volumes:
+ - /PATH/TO/UBOOQUITY/CONFIG by the location where ubooquity's config files will be stored.
+ - /PATH/TO/COMICSANDBOOKS by the location where your comics are stored.
+
+/!\ IMPORTANT: As this image execute ubooquity as a non-root user, the following steps have to be done prior to start the container:
+ - `mkdir /PATH/TO/UBOOQUITY/CONFIG`
+ - `chown -R 1042:1042 /PATH/TO/UBOOQUITY/CONFIG`
+
 
 ### Start the container :
 Run the following command line :
 
 ```
 docker run --restart=always -d \
-  -v /PATH/TO/UBOOQUITY/DATA:/config \
+  -v /PATH/TO/UBOOQUITY/CONFIG:/config \
   -v /PATH/TO/COMICSANDBOOKS:/media \
   -p 2202:2202 \
   -p 2502:2502 \
@@ -74,32 +74,25 @@ Use the following docker-compose.yml and adapt it to your configuration :
 version: '2'
 
 services:
-  ubooquity:
+   ubooquity:
     restart: always
     image: zerpex/ubooquity-docker
     container_name: ubooquity
+    volumes:
       - /PATH/TO/UBOOQUITY/CONFIG:/config
       - /PATH/TO/YOUR/COMICS:/media
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - UBOOQUITY_VERSION=
-      - FILE_ENCODING=UTF-8
-      - LIBRARY_PORT=2202
-      - ADMIN_PORT=2502
       - TZ=Europe/Paris
     ports:
       - 2202:2202
       - 2502:2502
-
-volumes:
-  files:
-    driver: local
 ```
 
 docker-compose with Watchtower :
 
 ```
-version: '2'
+version: '2.4'
 
 services:
    ubooquity:
@@ -107,14 +100,10 @@ services:
     image: zerpex/ubooquity-docker
     container_name: ubooquity
     volumes:
-      - ./files/conf:/config
-      - /library:/media
+      - /PATH/TO/UBOOQUITY/CONFIG:/config
+      - /PATH/TO/YOUR/COMICS:/media
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - UBOOQUITY_VERSION=
-      - FILE_ENCODING=UTF-8
-      - LIBRARY_PORT=2202
-      - ADMIN_PORT=2502
       - TZ=Europe/Paris
     ports:
       - 2202:2202
@@ -129,10 +118,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=Europe/Paris
-
-volumes:
-  files:
-    driver: local
 ```
 
 ## Notes
